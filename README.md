@@ -110,6 +110,26 @@
    {% render_rating request obj=article settings_slug='default-config' %}
    ```
 
+3. Add the following template tag to show rating information.
+   ```html
+   {% render_rating_info request=request obj=article settings_slug='default-config' %}
+   ```
+   use `custom_template` if you want to render your own template.
+   ```html
+   {% render_rating_info request=request obj=article settings_slug='default-config' custom_template='my_custom_rating_info.html' %}
+   ```
+   
+4. Add `render_rating_script` tag at the end of the last `render_rating` tag.
+   ```html
+   {% render_rating request=request obj=article settings_slug='default-config' %}
+   {% render_rating_info request=request obj=article settings_slug='default-config' %}
+   
+   {% render_rating request=request obj=article settings_slug='like-config' %}
+   {% render_rating_info request=request obj=article settings_slug='like-config' custom_template='rating/rating_info.html' %}
+   
+   {% render_rating_script %}
+   ```
+
 ## Settings
 
 ### Global Settings
