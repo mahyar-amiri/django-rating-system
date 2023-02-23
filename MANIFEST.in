@@ -1,0 +1,16 @@
+global-exclude *
+include LICENSE
+include MANIFEST.in
+include pyproject.toml
+include README.md
+include README.rst
+include setup.cfg
+include setup.py
+include VERSION
+recursive-include rating *.py
+recursive-include rating/locale *
+recursive-include rating/migrations *
+recursive-include rating/static *
+recursive-include rating/templates *
+recursive-include rating/templatetags *
+global-exclude *.pyc
