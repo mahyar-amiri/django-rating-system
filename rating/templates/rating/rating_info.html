@@ -1,0 +1,14 @@
+{% extends 'info/info_base.html' %}
+{% block main %}
+    <div style="font-size: xx-large">
+        <span>Count: {{ count }}</span><br>
+        <span>Average: {% if count %}{{ average }}/{{ settings.rates }}{% else %}-{% endif %}</span><br>
+        <span>Your Rate:
+            {% if request.user.is_authenticated %}
+                {% if rate is not None %}{{ rate }}/{{ settings.rates }}{% else %}-{% endif %}
+            {% else %}
+                <a href="{% url 'admin:login' %}">Login Here</a>
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}
