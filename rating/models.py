@@ -6,7 +6,6 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.html import format_html
-from django.utils.text import slugify
 
 from rating import settings
 
@@ -28,10 +27,6 @@ class RatingSettings(models.Model):
 
     def __str__(self):
         return f'{self.name}'
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
-        super(RatingSettings, self).save(*args, **kwargs)
 
     def source_file(self):
         return format_html(f"<img style='height:20px' src='{self.icon.url}'>") if self.icon else 'X'
@@ -65,7 +60,7 @@ class Rating(models.Model):
 
 
 class UserRating(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ratings')
     rate = models.FloatField()  # ON SCALE OF 0 TO 1
     rating = models.ForeignKey(Rating, on_delete=models.CASCADE, related_name='ratings')
     created = models.DateTimeField(auto_now_add=True)
