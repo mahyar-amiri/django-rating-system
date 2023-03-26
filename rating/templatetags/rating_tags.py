@@ -1,4 +1,5 @@
 import math
+
 from django import template
 from django.contrib.contenttypes.models import ContentType
 
@@ -60,6 +61,11 @@ def render_rating_info(request, obj, settings_slug, custom_template='rating/rati
         'rate': math.ceil(user_rating.rate * settings.rates) if user_rating is not None else None
     }
     return context
+
+
+@register.inclusion_tag('utils/IMPORTS.html')
+def render_rating_import():
+    pass
 
 
 @register.inclusion_tag('utils/SCRIPTS.html')

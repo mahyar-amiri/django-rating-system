@@ -98,11 +98,17 @@ Usage
 
       {% load rating_tags %}
 
-2. Add the following template tags where you want to render ratings.
+2. Add the following template tag to load stylesheet.
 
    .. code:: html
 
-      {% render_rating request obj settings_slug='default-config' %}  {# Render all the rating belong to the passed object "obj" #}
+      {% render_rating_import %}
+
+3. Add the following template tags where you want to render ratings.
+
+   .. code:: html
+
+      {% render_rating request obj settings_slug='default-config' %}  {# Render all the ratings belong to the passed object "obj" #}
 
    if your context_object_name is not ``obj`` (e.g. article) replace obj
    with context_object_name.
@@ -111,7 +117,7 @@ Usage
 
       {% render_rating request obj=article settings_slug='default-config' %}
 
-3. Add the following template tag to show rating information.
+4. Add the following template tag to show rating information.
 
    .. code:: html
 
@@ -123,10 +129,12 @@ Usage
 
       {% render_rating_info request=request obj=article settings_slug='default-config' custom_template='my_custom_rating_info.html' %}
 
-4. Add ``render_rating_script`` tag at the end of the last
+5. Add ``render_rating_script`` tag at the end of the last
    ``render_rating`` tag.
 
    .. code:: html
+
+      {% render_rating_import %}
 
       {% render_rating request=request obj=article settings_slug='default-config' %}
       {% render_rating_info request=request obj=article settings_slug='default-config' %}
