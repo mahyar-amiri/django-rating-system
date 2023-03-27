@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import requests
 from django.core.files import File
 from django.db import migrations
 
@@ -9,13 +10,13 @@ def InitialRatingSettings(apps, schema_editor):
 
     # STAR RATING CONFIG
     file_path = Path('rating/static/img/star.svg')
-    with file_path.open(mode='rb') as f:
-        RatingSettings.objects.create(name='Default Config', slug='default-config', icon=File(f, file_path.name))
+    f = requests.get(url="https://raw.githubusercontent.com/mahyar-amiri/django-rating-system/master/rating/static/rating/img/star.svg")
+    RatingSettings.objects.create(name='Default Config', slug='default-config', icon=File(f, file_path.name))
 
     # LIKE RATING CONFIG
     file_path = Path('rating/static/img/heart.svg')
-    with file_path.open(mode='rb') as f:
-        RatingSettings.objects.create(name='Like Config', slug='like-config', from_zero=False, rates=1, icon=File(f, file_path.name))
+    f = requests.get(url="https://raw.githubusercontent.com/mahyar-amiri/django-rating-system/master/rating/static/rating/img/heart.svg")
+    RatingSettings.objects.create(name='Like Config', slug='like-config', from_zero=False, rates=1, icon=File(f, file_path.name))
 
 
 class Migration(migrations.Migration):
