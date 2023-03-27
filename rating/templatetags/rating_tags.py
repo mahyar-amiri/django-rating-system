@@ -46,7 +46,7 @@ def get_user_rate(request, rating):
 
 
 @register.inclusion_tag('rating/info/info_extender.html')
-def render_rating_info(request, obj, settings_slug, custom_template='rating/rating_info.html'):
+def render_rating_info(request, obj, settings_slug, custom_template='rating/rating/rating_info.html'):
     settings = RatingSettings.objects.get(slug=settings_slug)
     object_info = get_object_info(obj)
     rating = get_rating(object_info, settings)
