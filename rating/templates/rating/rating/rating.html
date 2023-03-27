@@ -27,10 +27,12 @@
 
         </form>
     {% else %}
-        {% for _ in ''|center:settings.rates %}
-            <span class="rating-disable">
+        <div class="rating space">
+            {% for _ in ''|center:settings.rates %}
+                <span class="rating-disable">
                 <img src="{{ settings.icon.url }}" alt="{{ forloop.counter }}" style="height: {{ settings.height }}">
             </span>
-        {% endfor %}
+            {% endfor %}
+        </div>
     {% endif %}
 </div>

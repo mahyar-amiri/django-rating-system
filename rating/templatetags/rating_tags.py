@@ -18,7 +18,7 @@ def get_object_info(obj):
     return object_info
 
 
-@register.inclusion_tag('rating/rating.html')
+@register.inclusion_tag('rating/rating/rating.html')
 def render_rating(request, obj, settings_slug):
     context = {
         'object': obj,
@@ -45,7 +45,7 @@ def get_user_rate(request, rating):
         return None
 
 
-@register.inclusion_tag('info/info_extender.html')
+@register.inclusion_tag('rating/info/info_extender.html')
 def render_rating_info(request, obj, settings_slug, custom_template='rating/rating_info.html'):
     settings = RatingSettings.objects.get(slug=settings_slug)
     object_info = get_object_info(obj)
@@ -63,11 +63,11 @@ def render_rating_info(request, obj, settings_slug, custom_template='rating/rati
     return context
 
 
-@register.inclusion_tag('utils/IMPORTS.html')
+@register.inclusion_tag('rating/utils/IMPORTS.html')
 def render_rating_import():
     pass
 
 
-@register.inclusion_tag('utils/SCRIPTS.html')
+@register.inclusion_tag('rating/utils/SCRIPTS.html')
 def render_rating_script():
     pass

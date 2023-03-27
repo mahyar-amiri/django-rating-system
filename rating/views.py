@@ -58,4 +58,4 @@ class RatingInfo(View, LoginRequiredMixin):
             'average': round(rating.average * rating.settings.rates, 2),
             'rate': math.ceil(user_rating.rate * rating.settings.rates) if user_rating is not None else None
         }
-        return render(request, 'info/info_extender.html', context=context)
+        return render(request, 'rating/info/info_extender.html', context=context)
