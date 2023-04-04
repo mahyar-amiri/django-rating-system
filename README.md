@@ -1,8 +1,14 @@
 # Django Rating System
 
+<p align="center">
+  <img src="image.png" />
+</p>
+
 [![PyPI version](https://img.shields.io/pypi/v/django-rating-system.svg?logo=pypi&logoColor=FFE873)](https://pypi.org/project/django-rating-system)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/django-rating-system?color=092E20&logo=django)](https://pypi.org/project/django-rating-system)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/django-rating-system?color=092E20&logo=django)](https://pypistats.org/packages/django-rating-system)
 [![GitHub](https://img.shields.io/github/license/mahyar-amiri/django-rating-system)](LICENSE)
+
+**Here is a [live demo](https://mmaahhyyaarr.pythonanywhere.com/)**
 
 ## Table of Contents
 
@@ -13,6 +19,7 @@
     * [Global Settings](#global-settings)
     * [Config Settings](#config-settings)
 * [Front-End](#front-end)
+* [Live Demo](https://mmaahhyyaarr.pythonanywhere.com/)
 
 ## Installation
 
