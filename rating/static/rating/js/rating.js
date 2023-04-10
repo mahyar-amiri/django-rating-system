@@ -1,26 +1,11 @@
-$(`input[name^="rating-"]`)
-    .change(function () {
-        const urlhash = $(this)[0].name.split('-')[1];
-        $(`#rating-${urlhash}`).attr('user_rate', $(this).val());
-        CreateRating(urlhash);
-    })
-    .click(function () {
-        const urlhash = $(this)[0].name.split('-')[1];
-        if ($(this).val() === $(`#rating-${urlhash}`).attr('user_rate')) {
-            $(`input[name="rating-${urlhash}"][value="-1"]`).prop('checked', true);
-            $(`#rating-${urlhash}`).attr('user_rate', "-1");
-            CreateRating(urlhash);
-        }
-    });
-
-
 function getCookie(name) {
     let cookieValue = null;
-    if (document.cookie && document.cookie !== "") {
-        const cookies = document.cookie.split(";");
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
             const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + "=")) {
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                 break;
             }
@@ -29,36 +14,85 @@ function getCookie(name) {
     return cookieValue;
 }
 
+function load(element, url) {
+    let xmlhttp;
+    if (window.XMLHttpRequest) {
+        xmlhttp = new XMLHttpRequest();
+    } else {
+        xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
+    }
+
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState === XMLHttpRequest.DONE) {
+            if (xmlhttp.status === 200) {
+                element.innerHTML = xmlhttp.responseText;
+                const allScripts = element.getElementsByTagName('script');
+                for (let n = 0; n < allScripts.length; n++) {
+                    eval(allScripts [n].innerHTML)//run script inside div generally not a good idea but these scripts are anyways intended to be executed.
+                }
+            } else {
+                alert('Error');
+            }
+        }
+    }
+
+    xmlhttp.open('GET', url, true);
+    xmlhttp.send();
+}
 
 function CreateRating(urlhash) {
-    let form = $(`#rating-${urlhash}`);
-    let method = form.prop('method');
-    let action = form.prop('action');
-    let formData = {
+    let form = document.querySelector(`#rating-${urlhash}`);
+    let method = form.getAttribute('method');
+    let action = form.getAttribute('action');
+    let data = {
         //OBJECT INPUTS
-        app_name: $("[name='app_name']", form).val(),
-        model_name: $("[name='model_name']", form).val(),
-        content_type: $("[name='content_type']", form).val(),
-        object_id: $("[name='object_id']", form).val(),
-        settings_slug: $("[name='settings_slug']", form).val(),
-        rate: form.attr('user_rate')
+        app_name: form.querySelector(`[name='app_name']`).value,
+        model_name: form.querySelector(`[name='model_name']`).value,
+        content_type: form.querySelector(`[name='content_type']`).value,
+        object_id: form.querySelector(`[name='object_id']`).value,
+        settings_slug: form.querySelector(`[name='settings_slug']`).value,
+        rate: form.getAttribute('user_rate')
     };
-    $.ajax({
-        type: method,
-        url: action,
-        headers: {
-            "X-Requested-With": "XMLHttpRequest",
-            "X-CSRFToken": getCookie("csrftoken"),
-        },
-        data: formData,
-        success: function (urlhash) {
-            const template = $(`#rating-info-${urlhash}`).attr('template');
-            $(`#rating-info-${urlhash}`).load(
-                `/rating/info/${urlhash}?custom_template=${template}`
-            );
-        },
-        error: function () {
-            alert('ERROR in Creating Comment!')
+
+    // AJAX
+    let http = new XMLHttpRequest();
+    http.open(method, action, true);
+
+    http.setRequestHeader('Content-type', 'application/json');
+    http.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    http.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+
+    http.onreadystatechange = function () {
+        if (http.readyState === XMLHttpRequest.DONE) {
+            if (http.status === 200) {
+                const template_info = document.querySelector(`#rating-info-${urlhash}`);
+                if (template_info) {
+                    load(
+                        document.querySelector(`#rating-info-${urlhash}`),
+                        `/rating/info/${urlhash}?custom_template=${template_info.getAttribute('template')}`
+                    );
+                }
+            } else {
+                alert('ERROR in Submitting Rate!')
+            }
         }
-    });
+    }
+    http.send(JSON.stringify(data));
 }
+
+const rating_items = document.querySelectorAll(`input[name^='rating-']`)
+
+rating_items.forEach(function (item) {
+    const urlhash = item.name.split('-')[1];
+    item.addEventListener('change', function () {
+        document.querySelector(`#rating-${urlhash}`).setAttribute('user_rate', this.value);
+        CreateRating(urlhash);
+    });
+    item.addEventListener('click', function () {
+        if (this.value === document.querySelector(`#rating-${urlhash}`).getAttribute('user_rate')) {
+            document.querySelector(`input[name='rating-${urlhash}'][value='-1']`).checked = true;
+            document.querySelector(`#rating-${urlhash}`).setAttribute('user_rate', '-1');
+            CreateRating(urlhash);
+        }
+    })
+});

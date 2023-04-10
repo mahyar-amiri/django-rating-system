@@ -1,6 +1,7 @@
+import json
+import math
 import statistics
 
-import math
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -13,15 +14,16 @@ from rating.models import Rating, RatingSettings, UserRating
 class UserRatingCreate(View, LoginRequiredMixin):
     def post(self, request, *args, **kwargs):
         try:
-            app_name = request.POST.get('app_name', None)
-            model_name = request.POST.get('model_name', None)
-            object_id = request.POST.get('object_id', None)
+            data = json.loads(request.body)
+            app_name = data.get('app_name', None)
+            model_name = data.get('model_name', None)
+            object_id = data.get('object_id', None)
             content_type = ContentType.objects.get(app_label=app_name, model=model_name.lower())
-            settings_slug = request.POST.get('settings_slug', None)
+            settings_slug = data.get('settings_slug', None)
             rating_settings = RatingSettings.objects.get(slug=settings_slug)
 
             rating = Rating.objects.get_or_create(object_id=object_id, content_type=content_type, settings=rating_settings)[0]
-            rate = int(request.POST.get('rate', None))
+            rate = int(data.get('rate', None))
             if UserRating.objects.filter(user=request.user, rating=rating).exists():
                 user_rating = UserRating.objects.get(user=request.user, rating=rating)
                 if rate == -1:
