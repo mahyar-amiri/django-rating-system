@@ -200,8 +200,8 @@ templates
 ```text
 static
    ├── css
-   │    ├── style.css
-   │    └── style.min.css
+   │    ├── rating.css
+   │    └── rating.min.css
    ├── img
    │    ├── heart.svg
    │    └── star.svg
